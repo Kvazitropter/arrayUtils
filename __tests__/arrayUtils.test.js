@@ -4,30 +4,25 @@ import {
 } from '../arrayUtils.js';
 
 describe('array utils test', () => {
-  test('removes duplicates', () => {
+  test('removeDuplicates removes duplicates', () => {
     fc.assert(
       fc.property(fc.array(fc.integer()), (array) => {
-        const uniqueArray = [];
-        array.forEach((num) => {
-          if (!uniqueArray.includes(num)) {
-            uniqueArray.push(num);
-          }
-        });
+        const uniqueArray = [...new Set(array)];
         expect(removeDuplicates(array)).toEqual(uniqueArray);
       })
     )
   });
 
-  test('should sort numbers from smallest to biggest', () => {
+  test('sortNumbers should sort numbers from smallest to biggest', () => {
     fc.assert(
       fc.property(fc.array(fc.integer()), (array) => {
-        const sortedArray = array.sort((a, b) => a - b);
+        const sortedArray = [...array].sort((a, b) => a - b);
         expect(sortNumbers(array)).toEqual(sortedArray);
       }),
     );
   });
 
-  test('sums only positive numbers', () => {
+  test('sumPositiveNumbers sums only positive numbers', () => {
     fc.assert(
       fc.property(fc.array(fc.integer()), (array) => {
         const positiveNumbers = array.filter((num) => num >= 0);
@@ -37,7 +32,7 @@ describe('array utils test', () => {
     );
   });
 
-  test('separates even and odd numbers', () => {
+  test('groupByParity separates even and odd numbers', () => {
     fc.assert(
       fc.property(fc.array(fc.integer()), (array) => {
         const evenNumbers = array.filter((num) => num % 2 === 0);
@@ -49,11 +44,11 @@ describe('array utils test', () => {
     );
   });
 
-  test('finds intersection', () => {
+  test('findCommonElements finds common elements', () => {
     fc.assert(
       fc.property(fc.array(fc.integer()), fc.array(fc.integer()), (array1, array2) => {
-        const array = array1.concat(array2);
-        expect(findCommonElements(array, array2)).toEqual(array2);
+        const commonElements = array1.filter((num) => array2.includes(num));
+        expect(findCommonElements(array1, array2)).toEqual(commonElements);
       }),
     );
   });
